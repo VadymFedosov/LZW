@@ -7,10 +7,12 @@ import java.util.HashMap;
 public class Dictionary implements Runnable{
     private final String text;
     private final String outputFilename;
+    private final int wordLength;
 
-    public Dictionary(String text, String outputFilename) {
+    public Dictionary(String text, String outputFilename, int wordLength) {
         this.text = text;
         this.outputFilename = outputFilename;
+        this.wordLength = wordLength;
     }
 
     private HashMap<String, Integer> createASCIItable() {
@@ -48,7 +50,7 @@ public class Dictionary implements Runnable{
         p += parseText.toCharArray()[0];
 
         Integer code = 256;
-
+        int wLen = (int) Math.pow(2, wordLength);
         ArrayList<Integer> resultText = new ArrayList<>();
         for (int i = 0; i < parseText.length(); i++) {
             if (i != parseText.length() - 1) {
@@ -58,7 +60,9 @@ public class Dictionary implements Runnable{
                 p = p + c;
             } else {
                 resultText.add(table.get(p));
-                table.put(p + c,code);
+                if(code < wLen) {
+                    table.put(p + c, code);
+                }
                 p = c.toString();
                 code++;
             }
