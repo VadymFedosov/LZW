@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Lzw {
     public Lzw() { }
 
-    public void encodeFile(String inputFilename, String outputFilename) throws FileNotFoundException {
+    public void encodeFile(String inputFilename, String outputFilename, int wordLength) throws FileNotFoundException {
         StringBuilder sb = new StringBuilder();
 
         File inputFile = new File(inputFilename);
@@ -29,14 +29,14 @@ public class Lzw {
                 ch = (char)c;
                 sb.append(ch);
                 if (sb.toString().length() == 20000) {
-                    t[indexThread] = new Thread(new Dictionary(sb.toString(), outputFilename));
+                    t[indexThread] = new Thread(new Dictionary(sb.toString(), outputFilename, wordLength));
                     t[indexThread].start();
                     indexThread++;
                     sb = new StringBuilder();
                 }
             }
             if (sb.toString().length() > 0) {
-                t[indexThread] = new Thread(new Dictionary(sb.toString(), outputFilename));
+                t[indexThread] = new Thread(new Dictionary(sb.toString(), outputFilename, wordLength));
                 t[indexThread].start();
             }
         } catch(IOException ex){
